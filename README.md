@@ -28,3 +28,10 @@ Most quaternion libraries on PyPI bundle a vector class, rotation matrices, inte
 - `normalize` returns a zero quaternion unchanged when the norm is below `1e-12`, rather than dividing by near-zero and producing `inf`/`nan`.
 - `to_axis_angle` returns the default axis `(0.0, 0.0, 1.0)` and angle `0.0` for an identity quaternion, because the axis is mathematically undefined there. The caller should not read meaning into which axis is returned for a zero rotation.
 - The rotation angle is always in `[0, 2*pi]` via `2 * acos(w)`. If you need a signed angle, negate the axis for angles past `pi`.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
